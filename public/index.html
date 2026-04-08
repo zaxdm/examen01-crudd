@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Productos</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-content">
+      <h1>🛒 Gestión de Productos</h1>
+      <p>Sistema CRUD con Express.js y MongoDB</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ── FORMULARIO ── -->
+    <section class="card" id="seccion-formulario">
+      <h2 id="form-titulo">➕ Nuevo Producto</h2>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="nombre">Nombre *</label>
+          <input type="text" id="nombre" placeholder="Ej: Laptop HP" maxlength="100"/>
+          <span class="error-msg" id="err-nombre"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="categoria">Categoría *</label>
+          <select id="categoria">
+            <option value="">-- Selecciona --</option>
+            <option value="Electrónica">Electrónica</option>
+            <option value="Ropa">Ropa</option>
+            <option value="Alimentos">Alimentos</option>
+            <option value="Hogar">Hogar</option>
+            <option value="Deportes">Deportes</option>
+            <option value="Juguetes">Juguetes</option>
+            <option value="Libros">Libros</option>
+            <option value="Otros">Otros</option>
+          </select>
+          <span class="error-msg" id="err-categoria"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="precio">Precio (S/) *</label>
+          <input type="number" id="precio" placeholder="0.00" min="0" step="0.01"/>
+          <span class="error-msg" id="err-precio"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="stock">Stock *</label>
+          <input type="number" id="stock" placeholder="0" min="0" step="1"/>
+          <span class="error-msg" id="err-stock"></span>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="descripcion">Descripción *</label>
+          <textarea id="descripcion" placeholder="Describe el producto..." maxlength="500" rows="3"></textarea>
+          <span class="error-msg" id="err-descripcion"></span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" id="btn-guardar" onclick="guardarProducto()">
+          💾 Guardar Producto
+        </button>
+        <button class="btn btn-secondary" id="btn-cancelar" onclick="cancelarEdicion()" style="display:none">
+          ✖ Cancelar
+        </button>
+      </div>
+
+      <div id="alerta" class="alerta" style="display:none"></div>
+    </section>
+
+    <!-- ── FILTROS ── -->
+    <section class="card" id="seccion-filtros">
+      <div class="filtros-row">
+        <div class="form-group">
+          <label for="filtro-categoria">Filtrar por categoría</label>
+          <select id="filtro-categoria" onchange="cargarProductos()">
+            <option value="">Todas las categorías</option>
+            <option value="Electrónica">Electrónica</option>
+            <option value="Ropa">Ropa</option>
+            <option value="Alimentos">Alimentos</option>
+            <option value="Hogar">Hogar</option>
+            <option value="Deportes">Deportes</option>
+            <option value="Juguetes">Juguetes</option>
+            <option value="Libros">Libros</option>
+            <option value="Otros">Otros</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="filtro-orden">Ordenar por precio</label>
+          <select id="filtro-orden" onchange="cargarProductos()">
+            <option value="">Más recientes</option>
+            <option value="precio_asc">Precio: menor a mayor</option>
+            <option value="precio_desc">Precio: mayor a menor</option>
+          </select>
+        </div>
+        <button class="btn btn-secondary" onclick="cargarProductos()">🔄 Actualizar</button>
+      </div>
+    </section>
+
+    <!-- ── TABLA ── -->
+    <section class="card" id="seccion-tabla">
+      <div class="tabla-header">
+        <h2>📦 Productos registrados</h2>
+        <span class="badge" id="contador-productos">0 productos</span>
+      </div>
+
+      <div class="tabla-wrapper">
+        <table id="tabla-productos">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Categoría</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-productos">
+            <tr>
+              <td colspan="7" class="vacio">Cargando productos...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── MODAL CONFIRMACIÓN ELIMINAR ── -->
+  <div id="modal-overlay" class="modal-overlay" style="display:none">
+    <div class="modal">
+      <h3>⚠️ Confirmar eliminación</h3>
+      <p>¿Estás seguro de que deseas eliminar <strong id="modal-nombre-producto"></strong>?</p>
+      <p class="modal-sub">Esta acción no se puede deshacer.</p>
+      <div class="modal-actions">
+        <button class="btn btn-danger" id="btn-confirmar-eliminar">🗑 Sí, eliminar</button>
+        <button class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Desarrollado con Express.js + MongoDB + Vanilla JS</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
